@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
 import AppLogin from './AppLogin';
 import AppLogo from './AppLogo';
 import HeaderWrapper from './Header.style';

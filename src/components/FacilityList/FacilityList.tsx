@@ -1,6 +1,7 @@
-import { Card } from '@mui/material';
+import { Grid } from '@mui/material';
 import * as React from 'react';
 import { FacilityI } from '../../types/Facility.type';
+import FacilityCard from '../FacilityCard/FacilityCard';
 
 type Props = {
     facilityListData: FacilityI[]
@@ -15,17 +16,19 @@ const FacilitList: React.FC<Props> = ({facilityListData}) => {
     return (
         <div>
             {!(facilityListData && facilityListData.length) ?
-                    <NoData /> : 
-                    (
+                <NoData /> : 
+                (
+                    <Grid container spacing={2}>
+                    {
                         facilityListData.map((d, index) => (
-                            <Card key={index} style={{margin: "2rem"}}>
-                                Name: {d.name || '-'}
-                            </Card>
+                            <Grid item xs={12} sm={6} md={4} key={index}>
+                                <FacilityCard facility={d}></FacilityCard>
+                            </Grid>
                         ))
-                    )
+                    }
+                    </Grid>
+                )
             }
-
-            
         </div>
     );
 };

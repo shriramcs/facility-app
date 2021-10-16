@@ -41,7 +41,13 @@ export class LocalStorageService<T> implements BackendServiceI<T>{
     }
     
     public addItem(data: T): Promise<string>{
-        return Promise.resolve("");
+        let list = this.getLocalStorageData();
+        if(!list){
+            list = [];
+        }
+        list.push({...data});
+        this.setLocalStorageData(list);
+        return this.resolveWithDelay(() => "SUCCESS", delayDuration);
     }
     
     public putItem(data: T): Promise<string>{
