@@ -20,9 +20,6 @@ const HeaderWrapper = styled.header`
       text-decoration: underline;
       color: orange
     }
-    .App-link {
-      color: green;
-    }
     
     .App-header img {
       width: 50px;
@@ -57,22 +54,18 @@ const HeaderWrapper = styled.header`
       justify-content: space-between;
       align-items: center;
     }
-    .header__start{
-      flex: 1;
+
+    .header__wrapper > * {
+        flex: 1;
     }
     .header__middle{
-      flex: 1;
       text-align: center;
       display: flex;
       flex-flow: column;
     }
-    .header__end{
-      flex: 1;
-    }
     
     .header__middle a{
       text-decoration: none;
-      color: var(--primary-color);
       font-size: 1.5rem;
       font-weight: 600;
     }
@@ -92,5 +85,7 @@ const HeaderWrapper = styled.header`
       margin-right: 1rem;
     }
 `;
+
+export const NavBarWrapper = styled.div``;
 
 export default HeaderWrapper;
