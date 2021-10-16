@@ -1,16 +1,26 @@
+import {
+  BrowserRouter as Router,
+} from 'react-router-dom';
+import { Route, Switch} from 'react-router';
+
+import Header from "./components/Header/Header";
+import Footer from './components/Footer/Footer';
+import FacilityPage from './pages/FacilityPage/FacilityPage';
+
 function App() {
   return (
-    <>
-      <header>
-        App header
-      </header>
-      <main>
-        App Main
-      </main>
-      <footer>
-        copyFacility 2021 MIT
-      </footer>
-    </>
+    <Router>
+      <Header></Header>
+      <Switch>
+        <Route path="/facility">
+          <FacilityPage></FacilityPage>
+        </Route>
+        <Route path="/">
+          <FacilityPage></FacilityPage>
+        </Route>
+      </Switch>
+      <Footer></Footer>
+    </Router>
   );
 }
 
