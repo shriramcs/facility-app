@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import { FacilityI } from "../../types/Facility.type";
 import FacilityServiceApi from "../../services/facility.service";
 import ModalDialog from "../ModalDialog/ModalDialog";
-import { EMPTY_STRING, FACILITY_EDIT_MODAL_TITLE } from "../../common/constants";
+import { EMPTY_STRING, FACILITY_EDIT_MODAL_TITLE, ROUTE_FACILITY_URL } from "../../common/constants";
 
 interface Props {
     facility: FacilityI;
@@ -20,13 +20,20 @@ export enum modeEnum{
     'edit'
 };
 
+const NEW_FAILITY: FacilityI = {
+    address: "",
+    id: "",
+    name: "",
+    type: 'range'
+};
+
 const EditModal: React.FC<Props> = props => {
     const {refreshList} = props;
     let { id }: any = useParams();
     const history = useHistory();
     const [openEditModal, setOpenEditModal] = useState(false);
     const [mode, setMode] = React.useState<modeEnum>(modeEnum.new);
-    const [facilityEditModal, setFacilityEditModal] = React.useState<FacilityI>({} as FacilityI);
+    const [facilityEditModal, setFacilityEditModal] = React.useState<FacilityI>(NEW_FAILITY);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(EMPTY_STRING);
 
@@ -43,13 +50,16 @@ const EditModal: React.FC<Props> = props => {
         } catch(e) {
             console.log(e);
         }
+        return () => {
+            setOpenEditModal(false);
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     const modalTitle = () => mode === modeEnum.edit ? FACILITY_EDIT_MODAL_TITLE : FACILITY_EDIT_MODAL_TITLE;
     const handleClose = () => {
         setOpenEditModal(false);
-        history.goBack();
+        history.push(ROUTE_FACILITY_URL);
     };
     const handleSaveChanges = () => {
         console.log(facilityEditModal);
@@ -68,8 +78,7 @@ const EditModal: React.FC<Props> = props => {
             FacilityServiceApi.putItem(facilityEditModal)
         ).then(d => {
             setLoading(false);
-            history.goBack();
-            handleClose();
+            history.push(ROUTE_FACILITY_URL);
             refreshList();
         }).catch(e => {
             setLoading(false);

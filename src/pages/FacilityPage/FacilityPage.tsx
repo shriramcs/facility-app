@@ -2,48 +2,33 @@ import { Alert, Button, LinearProgress, Typography } from '@mui/material';
 import * as React from 'react';
 import FacilitList from '../../components/FacilityList/FacilityList';
 import FacilityPageWrapper from './FacilityPage.style';
-import FacilityServiceApi from '../../services/facility.service';
 import { FacilityI } from '../../types/Facility.type';
 import { Switch, useHistory, Route, useParams } from 'react-router-dom';
 import EditModal from '../../components/EditModal/EditModal';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { ROUTE_FACILITY_NEW_URL } from '../../common/constants';
+import { useFacilityContext } from '../../contexts/FacilityContext';
 
 type Props = {};
 
 const FacilityPage: React.FC<Props> = () => {
+    const { facilities, fetchFacilities, isLoading, error } = useFacilityContext();
     const pageTitle = 'Facility List';
-    const [facilityListData, setFacilityListData] = React.useState<FacilityI[]>([] as FacilityI[]);
-    const [error, setError] = React.useState();
-    const [loading, setLoading] = React.useState(false);
     const history = useHistory();
-    const {id}: any = useParams();
+    // const {id}: any = useParams();
 
-    React.useEffect(() => {
-        console.log("refreshing list");
+    // React.useEffect(() => {
+    //     console.log("refreshing list");
 
-        fetchListData();
-    }, [id]);
-
-    const fetchListData = () => {
-        setLoading(true);
-        FacilityServiceApi.getList().then((d: FacilityI[]) => {
-            setLoading(false);
-            setFacilityListData(d);
-        })
-        .catch(e => {
-            setLoading(false);
-            console.log("ERROR", e);
-            setError(e.message);
-        });
-    }
+    //     fetchListData();
+    // }, [id]);
 
     const handleCreate = () => {
         history.push(ROUTE_FACILITY_NEW_URL);
     }
 
     const handleRefresh = () => {
-        fetchListData();
+        fetchFacilities();
     }
 
     return (
@@ -66,8 +51,8 @@ const FacilityPage: React.FC<Props> = () => {
             {error && <Alert severity="error">{error}</Alert>}
 
             {
-                loading ? <LinearProgress></LinearProgress> :
-                <FacilitList facilityListData={facilityListData} refreshList={handleRefresh}></FacilitList>
+                isLoading ? <LinearProgress></LinearProgress> :
+                <FacilitList facilityListData={facilities} refreshList={handleRefresh}></FacilitList>
             }
 
             <Switch>

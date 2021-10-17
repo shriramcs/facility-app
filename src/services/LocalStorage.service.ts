@@ -8,7 +8,7 @@ export class LocalStorageService<T> implements BackendServiceI<T>{
     private getLocalStorageData(): T[]{
         
         const facilityListData = localStorage.getItem(localStorageToken);
-        return facilityListData ? JSON.parse(facilityListData) : null;
+        return facilityListData ? JSON.parse(facilityListData) : [];
     }
 
     private setLocalStorageData(data: T[]): void {

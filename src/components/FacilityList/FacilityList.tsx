@@ -5,7 +5,7 @@ import DeleteModal from '../DeleteModal';
 import FacilityCard from '../FacilityCard/FacilityCard';
 
 type Props = {
-    facilityListData: FacilityI[];
+    facilityListData: FacilityI[]  | null | undefined;
     refreshList: () => void;
 };
 
