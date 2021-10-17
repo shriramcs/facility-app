@@ -3,7 +3,7 @@ import * as React from 'react';
 import FacilitList from '../../components/FacilityList/FacilityList';
 import FacilityPageWrapper from './FacilityPage.style';
 import { FacilityI } from '../../types/Facility.type';
-import { Switch, useHistory, Route, useParams } from 'react-router-dom';
+import { Switch, useHistory, Route } from 'react-router-dom';
 import EditModal from '../../components/EditModal/EditModal';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { ROUTE_FACILITY_NEW_URL } from '../../common/constants';

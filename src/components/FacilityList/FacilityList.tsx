@@ -1,8 +1,10 @@
 import { Grid } from '@mui/material';
 import React from 'react';
+import { useFacilityContext } from '../../contexts/FacilityContext';
 import { FacilityI } from '../../types/Facility.type';
 import DeleteModal from '../DeleteModal';
 import FacilityCard from '../FacilityCard/FacilityCard';
+import PaginationComp from '../Pagination/PaginationComp';
 
 type Props = {
     facilityListData: FacilityI[]  | null | undefined;
@@ -11,10 +13,18 @@ type Props = {
 
 const FacilitList: React.FC<Props> = ({facilityListData, refreshList}) => {
 
+    const { pagination } = useFacilityContext();
+
+    
     const [deleteFacility, setDeleteFacility] = React.useState<FacilityI>();
+
     const handleDeleteFacility = (facility: FacilityI) => {
         setDeleteFacility(facility);
     } 
+
+    const onChange = (page: number, pageSize: number) => {
+        console.log(page, pageSize);
+    };
 
     const NoData = () => (<div style={{textAlign: 'center', padding: "1rem"}}>
         No Failities found. Please click on above button to start creating new facilities
@@ -25,18 +35,24 @@ const FacilitList: React.FC<Props> = ({facilityListData, refreshList}) => {
             {!(facilityListData && facilityListData.length) ?
                 <NoData /> : 
                 (
-                    <Grid container spacing={2}>
-                    {
-                        facilityListData.map((d, index) => (
-                            <Grid item xs={12} sm={6} md={4} key={index}>
-                                <FacilityCard
-                                    facility={d}
-                                    onDeleteFacility={() => handleDeleteFacility(d)}
-                                ></FacilityCard>
-                            </Grid>
-                        ))
-                    }
-                    </Grid>
+                    <>
+                        <Grid container spacing={2}>
+                        {
+                            facilityListData.map((d, index) => (
+                                <Grid item xs={12} sm={6} md={4} key={index}>
+                                    <FacilityCard
+                                        facility={d}
+                                        onDeleteFacility={() => handleDeleteFacility(d)}
+                                    ></FacilityCard>
+                                </Grid>
+                            ))
+                        }
+                        </Grid>
+                        
+                        {pagination.pages > 0 && <div style={{marginTop: "1rem"}}>
+                            <PaginationComp onChange={onChange} pageCount={pagination.pages}></PaginationComp>
+                        </div>}
+                    </>
                 )
             }
             {deleteFacility && <DeleteModal facilityId={deleteFacility.id} refreshList={refreshList}></DeleteModal> }
