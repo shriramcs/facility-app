@@ -1,114 +1,137 @@
-import { Modal, Divider, Paper, TextField, Typography, Button } from "@mui/material";
-import { Box } from "@mui/system";
-import React from "react";
+import { LinearProgress, Paper, TextField, Typography } from "@mui/material";
+import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import CloseIcon from '@mui/icons-material/Close';
 import { FacilityI } from "../../types/Facility.type";
 import FacilityServiceApi from "../../services/facility.service";
+import ModalDialog from "../ModalDialog/ModalDialog";
 
 interface Props {
     facility: FacilityI;
-    mode: string;
     refreshList: () => void
 }
 
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'white',
-    border: '2px solid #000',
-    boxShadow: 24
+export enum modeEnum{
+    'new',
+    'edit'
 };
 
 const EditModal: React.FC<Props> = props => {
-    const {facility, mode, refreshList} = props;
+    const {refreshList} = props;
     let { id }: any = useParams();
     const history = useHistory();
-    const [openModal, setOpenModel] = React.useState<boolean>(false);
-    const modalTitle = mode === 'edit' ? "Edit Information" : "New Information";
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [mode, setMode] = React.useState<modeEnum>(modeEnum.new);
+    const [facilityEditModal, setFacilityEditModal] = React.useState<FacilityI>({} as FacilityI);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleCancel = () => {
-        setOpenModel(false);
+    React.useEffect(() => {
+        setOpenEditModal(!!id);
+        try{
+            setMode(id === 'new' ? modeEnum.new : modeEnum.edit);
+            if(id !== 'new'){
+                const facId = parseInt(id);
+                if(!isNaN(facId)){
+                    fetchFacilityDetails(parseInt(id));
+                }
+            }
+        } catch(e) {
+            console.log(e);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id]);
+
+    const modalTitle = () => mode === modeEnum.edit ? "Edit Information" : "New Information";
+    const handleClose = () => {
+        setOpenEditModal(false);
         history.goBack();
     };
     const handleSaveChanges = () => {
-        console.log(facility);
-
+        console.log(facilityEditModal);
+        
         //validate before submitting the form and close modal.
-        if(facility){
-            if(!(facility.name && facility.type && facility.address)){
+        if(facilityEditModal){
+            if(!(facilityEditModal.name && facilityEditModal.type && facilityEditModal.address)){
                 return;
             }
         }
 
-        FacilityServiceApi.addItem(facility).then(d => {
-            console.log("added successfully", d);
-            setOpenModel(false);
+        setLoading(true);
+        (
+            mode === modeEnum.new ?
+            FacilityServiceApi.addItem(facilityEditModal) : 
+            FacilityServiceApi.putItem(facilityEditModal)
+        ).then(d => {
+            setLoading(false);
             history.goBack();
+            handleClose();
             refreshList();
+        }).catch(e => {
+            setLoading(false);
+            console.log(e);
         })
-        
     };
-    const handleChangeName = (e: any) => {
-        facility.name = e.target.value;
-    }
-    const handleChangeType = (e: any) => {
-        facility.type = e.target.value;
-    }
-    const handleChangeAddress = (e: any) => {
-        facility.address = e.target.value;
+    
+    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: keyof FacilityI) => {
+        setFacilityEditModal({ ...facilityEditModal, [field]: e.target.value });
     }
 
-    React.useEffect(() => {
-        setOpenModel(!!id);
-    }, [id]);
+    const fetchFacilityDetails = (id: number) => {
+        setLoading(true);
+        FacilityServiceApi.getItem(id).then(d => {
+            if(d) {
+                setFacilityEditModal(d);
+            } else {
+                setError("Error loading Facility details, please contact the admin team.");
+            }
+            setLoading(false);
+        }).catch(e => {
+            setError("Error loading Facility details, please contact the admin team.");
+            console.log(e);
+            setLoading(false);
+        });
+    }
   
     return (
-        <Modal
-        open={openModal}
-        onClose={handleCancel}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-            <div>
-                <Typography variant="h5" component="div" sx={{p: 2}}>
-                    {modalTitle}
-                </Typography>
-                <CloseIcon onClick={handleCancel} style={{position: "absolute", top: "20px", right: "1rem"}}></CloseIcon>
-            </div>
-            <Divider sx={{mt: 2, mb: 2}}/>
+        <ModalDialog
+            open={openEditModal}
+            onClose={handleClose}
+            id="editNewModal"
+            title={modalTitle()}
+            maxWidth="sm"
+            primaryButtonName="Save Changes"
+            primaryButtonColor="warning"
+            onOk={handleSaveChanges}
+        >
+            {
+            loading ? <LinearProgress></LinearProgress> :
+            (error ? 
+            <Typography gutterBottom>
+                {error}
+            </Typography> :
             <Paper sx={{p: 2}} elevation={0}>
                 <TextField
                     sx={{mb: 2}} fullWidth 
-                    id="facility-name" 
+                    id="facilityEditModal-name" 
                     label="Facility Name" 
-                    onChange={handleChangeName}
-                    variant="filled" value={facility.name}/>
+                    onChange={(e) => handleChangeInput(e, "name")}
+                    variant="filled" value={facilityEditModal.name}/>
                 <FormControl sx={{mb: 2}} fullWidth component="fieldset" 
-                    onChange={handleChangeType}>
-                    <RadioGroup row aria-label="type" name="row-radio-buttons-group" value={facility.type}>
+                    onChange={(e: any) => handleChangeInput(e, "type")}>
+                    <RadioGroup row aria-label="type" name="row-radio-buttons-group" value={facilityEditModal.type}>
                         <FormControlLabel value="range" control={<Radio />} label="Range" />
                         <FormControlLabel value="indoor" control={<Radio />} label="Indoor" />
                     </RadioGroup>
                 </FormControl>
-                <TextField sx={{mb: 2}} fullWidth id="address" label="Address" variant="filled" value={facility.address}
-                    onChange={handleChangeAddress}/>
-            </Paper>
-            <Divider sx={{mt: 2, mb: 2}}/>
-            <Paper sx={{p: 2}} elevation={0} style={{display: 'flex', gap: "0.5rem"}}>
-                <Button variant="outlined" style={{flex: 1}} onClick={handleCancel}>Cancel</Button>
-                <Button variant="contained" style={{flex: 1}} onClick={handleSaveChanges}>Save Changes</Button>
-            </Paper>
-        </Box>
-      </Modal>
+                <TextField sx={{mb: 2}} fullWidth id="address" label="Address" variant="filled" value={facilityEditModal.address}
+                    onChange={(e) => handleChangeInput(e, "address")}/>
+            </Paper>)
+            }
+        </ModalDialog>
     );
 }
 

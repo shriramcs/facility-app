@@ -1,16 +1,7 @@
 import { BackendServiceI } from "../types/common.types";
 
 const localStorageToken = 'FACILITIES'
-const delayDuration = 1000;
-
-// const resolveWithDelay = (fn: any, duration: number): Promise<any>  => {
-//     return new Promise((res) => {
-//         setTimeout(() => {
-//             res(fn());
-//         }, duration)
-//     });
-// };
-
+const delayDuration = 2000;
 
 export class LocalStorageService<T> implements BackendServiceI<T>{
 
@@ -36,8 +27,10 @@ export class LocalStorageService<T> implements BackendServiceI<T>{
         return this.resolveWithDelay(() => this.getLocalStorageData(), delayDuration);
     }
     
-    public getItem(): Promise<T>{
-        return Promise.resolve({} as T);
+    public getItem(id: number): Promise<T>{
+        const list: any = this.getLocalStorageData();
+        const itemDetails: any[] = (list || []).find((item: any) => item.id === id);
+        return this.resolveWithDelay(() => itemDetails, delayDuration);
     }
     
     public addItem(data: T): Promise<string>{
@@ -45,13 +38,22 @@ export class LocalStorageService<T> implements BackendServiceI<T>{
         if(!list){
             list = [];
         }
-        list.push({...data});
+        list.push({...data, id: list.length + 1});
         this.setLocalStorageData(list);
-        return this.resolveWithDelay(() => "SUCCESS", delayDuration);
+        return this.resolveWithDelay(() => {
+            console.log("add SUCCESS");
+            return "SUCCESS";
+        }, delayDuration);
     }
     
-    public putItem(data: T): Promise<string>{
-        return Promise.resolve("");
+    public putItem(data: any): Promise<string>{
+        let list: any = this.getLocalStorageData();
+        list = (list || []).map((item: any) => item.id === data.id ? {...data} : item);
+        this.setLocalStorageData(list);
+        return this.resolveWithDelay(() => {
+            console.log("update SUCCESS");
+            return "SUCCESS";
+        }, delayDuration);
     }
     deleteItem(data: T): Promise<string>{
         return Promise.resolve("");

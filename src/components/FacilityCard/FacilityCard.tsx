@@ -1,5 +1,8 @@
-import { Button, Card, CardActions, CardContent, Typography } from "@mui/material";
+import { DeleteOutline } from "@mui/icons-material";
+import { Button, Card, CardActions, CardContent, IconButton, Typography } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 import { makeStyles } from "@mui/styles";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import React from "react";
 import {
     useHistory
@@ -17,19 +20,29 @@ const muiStyles: any = makeStyles((theme: any) => ({
 
 interface Props {
     facility: FacilityI;
-    mode?: string
+    mode?: string;
+    onDeleteFacility: () => void
 }
 const FacilityCard: React.FC<Props> = (props) => {
-    const { facility, mode } = props;
+    const { facility, mode, onDeleteFacility } = props;
     const history = useHistory();
     const muiClasses = muiStyles();
     
     const handleDelete = () => {
         console.log("delete");
+        onDeleteFacility()
     }
     const handleEdit = () => {
         console.log("Edit");
-        history.push("/1");
+        try{
+            const id = parseInt(facility.id);
+            if(!isNaN(id)){
+                history.push("/" + facility.id);
+            }
+        } catch(e) {
+            console.log(e);
+        };
+        
     }
 
     return (
@@ -47,8 +60,14 @@ const FacilityCard: React.FC<Props> = (props) => {
             </CardContent>
             {
                 mode !== "edit" && <CardActions>
-                    <Button size="small" onClick={handleEdit} >Edit</Button>
-                    <Button size="small" onClick={handleDelete} >delete</Button>
+                    <Button size="small" style={{flex: 1}} onClick={handleEdit} >
+                        Edit
+                        <EditIcon sx={{ml: 1}}/>
+                    </Button>
+                    <Button size="small" style={{flex: 1}} color="error" onClick={handleDelete} >
+                        delete
+                        <DeleteOutlineIcon sx={{ml: 1}} />
+                    </Button>
                 </CardActions>
             }
             

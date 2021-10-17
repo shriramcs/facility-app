@@ -6,6 +6,7 @@ import FacilityServiceApi from '../../services/facility.service';
 import { FacilityI } from '../../types/Facility.type';
 import { Switch, useHistory, Route, useParams } from 'react-router-dom';
 import EditModal from '../../components/EditModal/EditModal';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
 type Props = {};
 
@@ -37,7 +38,7 @@ const FacilityPage: React.FC<Props> = () => {
     }
 
     const handleCreate = () => {
-        history.push('/0');
+        history.push('/new');
     }
 
     const handleRefresh = () => {
@@ -55,20 +56,22 @@ const FacilityPage: React.FC<Props> = () => {
                     className="classes.root"
                     style={{textTransform: 'none'}}
                     onClick={handleCreate}
-                >Create New Facility</Button>
+                >
+                    Create New Facility
+                    <AddOutlinedIcon sx={{ml: 1}} />
+                </Button>
             </div>
             
             {error && <Alert severity="error">{error}</Alert>}
 
             {
                 loading ? <LinearProgress></LinearProgress> :
-                <FacilitList facilityListData={facilityListData}></FacilitList>
+                <FacilitList facilityListData={facilityListData} refreshList={handleRefresh}></FacilitList>
             }
 
             <Switch>
-                <Route path="/:id" children={<EditModal facility={{} as FacilityI} mode="edit" refreshList={handleRefresh} />} />
+                <Route path="/:id" children={<EditModal facility={{} as FacilityI} refreshList={handleRefresh} />} />
             </Switch>
-            
         </FacilityPageWrapper>
     );
 };
