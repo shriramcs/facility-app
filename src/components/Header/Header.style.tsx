@@ -12,6 +12,7 @@ const HeaderWrapper = styled.header`
     
     .navbar a {
       text-decoration: none;
+      white-space: nowrap;
     }
     .navbar a:first-child {
       margin-left: 0.25rem;

@@ -7,6 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { makeStyles } from '@mui/styles';
 
 const NewDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -63,7 +64,20 @@ export interface ModalDialogProps {
     maxWidth?: 'xs' | 'sm' | 'md' | 'lg'
 }
 
+const muiStyles: any = makeStyles((theme: any) => ({
+  button:{
+      textTransform: 'none',
+      flex: 1
+  },
+  card: {
+      '&:hover': {
+          border: 'nor',
+      }
+  },
+}));
+
 const ModalDialog: React.FC<ModalDialogProps> = (props) => {
+    const muiClasses = muiStyles();
     const {
         id,
         open,
@@ -114,13 +128,13 @@ const ModalDialog: React.FC<ModalDialogProps> = (props) => {
             <DialogActions>
                 <Button
                     variant="text"
-                    style={{flex: 1}}
+                    className={muiClasses.button}
                     onClick={handleClose}>{secondaryButtonName || defaultSecondaryBtnName}
                 </Button>
                 <Button
                     variant="contained"
                     color={primaryButtonColor}
-                    style={{flex: 1}}
+                    className={muiClasses.button}
                     onClick={handleSaveChanges}
                 >{primaryButtonName || defaultPrimaryBtnName}</Button>
             </DialogActions>

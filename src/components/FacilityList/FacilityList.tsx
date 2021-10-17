@@ -39,7 +39,7 @@ const FacilitList: React.FC<Props> = ({facilityListData, refreshList}) => {
                     </Grid>
                 )
             }
-            {deleteFacility && <DeleteModal facility={deleteFacility} refreshList={refreshList}></DeleteModal> }
+            {deleteFacility && <DeleteModal facilityId={deleteFacility.id} refreshList={refreshList}></DeleteModal> }
         </div>
     );
 };

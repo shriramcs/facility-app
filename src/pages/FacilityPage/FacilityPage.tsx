@@ -15,14 +15,6 @@ const FacilityPage: React.FC<Props> = () => {
     const { facilities, fetchFacilities, isLoading, error } = useFacilityContext();
     const pageTitle = 'Facility List';
     const history = useHistory();
-    // const {id}: any = useParams();
-
-    // React.useEffect(() => {
-    //     console.log("refreshing list");
-
-    //     fetchListData();
-    // }, [id]);
-
     const handleCreate = () => {
         history.push(ROUTE_FACILITY_NEW_URL);
     }

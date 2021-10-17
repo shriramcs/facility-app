@@ -1,30 +1,34 @@
-import { Paper, Typography } from "@mui/material";
+import { LinearProgress, Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { EMPTY_STRING } from "../common/constants";
 import FacilityServiceApi from "../services/facility.service";
-import { FacilityI } from "../types/Facility.type";
 import ModalDialog from "./ModalDialog/ModalDialog";
 
 interface Props {
-    facility: FacilityI;
+    facilityId: string;
     refreshList: () => void
 }
 
 const DeleteModal: React.FC<Props> = props => {
-    const {facility, refreshList} = props;
+    const {facilityId, refreshList} = props;
     const [openDeleteModal, setOpenDeleteModal] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(EMPTY_STRING);
 
     const handleClose = () => {
         setOpenDeleteModal(false);
     };
-    const handleDelete = () => {
-        console.log(facility);
-
-        FacilityServiceApi.deleteItem(facility).then(d => {
-            console.log("delete successfully", d);
-            handleClose();
-            refreshList();
-        })
-        
+    const handleDelete = async () => {
+        setLoading(true);
+        try{
+            await FacilityServiceApi.deleteItem(facilityId)
+        } catch(e: any) {
+            setError(e.message);
+        } finally {
+            setLoading(false);
+        }
+        handleClose();
+        refreshList();
     };
   
     return (
@@ -39,6 +43,13 @@ const DeleteModal: React.FC<Props> = props => {
             onOk={handleDelete}
         >
             <Paper sx={{p: 2}} elevation={0}>
+                { loading && <LinearProgress sx={{mb: 2}}></LinearProgress> }
+                { error && 
+                    <Typography gutterBottom>
+                        {error}
+                    </Typography>
+                }
+            
                 <Typography gutterBottom>
                     Are you sure you want to delete this facility ? <br />
                     You won't be able to recover this data.

@@ -74,18 +74,18 @@ const facilityReducer: FR = (state: FacilityStateI, action: FacilityActions) => 
       error: ""
     });
 
-    let fetchFacilities = () => {
+    let fetchFacilities = async () => {
         dispatch({ type: FacilityActionTypeEnum.FACILITY_FETCH });
-        FacilityServiceApi.getList().then((d: FacilityI[]) => {
+        try{
+            const d = await FacilityServiceApi.getList();
             if(d){
                 dispatch({ type: FacilityActionTypeEnum.FACILITY_SUCCESS, payload: d });
             } else {
                 dispatch({ type: FacilityActionTypeEnum.FACILITY_FAILED, payload: FETCH_FAILURE_MESSAGE});
             }
-        })
-        .catch(e => {
-            dispatch({ type: FacilityActionTypeEnum.FACILITY_FAILED, payload: FETCH_FAILURE_MESSAGE + e});
-        });
+        } catch(e: any) {
+            dispatch({ type: FacilityActionTypeEnum.FACILITY_FAILED, payload: FETCH_FAILURE_MESSAGE + e.message});
+        }
     }
   
     useEffect(() => {

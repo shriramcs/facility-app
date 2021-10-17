@@ -41,7 +41,6 @@ export class LocalStorageService<T> implements BackendServiceI<T>{
         list.push({...data, id: list.length + 1});
         this.setLocalStorageData(list);
         return this.resolveWithDelay(() => {
-            console.log("add SUCCESS");
             return "SUCCESS";
         }, delayDuration);
     }
@@ -51,11 +50,15 @@ export class LocalStorageService<T> implements BackendServiceI<T>{
         list = (list || []).map((item: any) => item.id === data.id ? {...data} : item);
         this.setLocalStorageData(list);
         return this.resolveWithDelay(() => {
-            console.log("update SUCCESS");
             return "SUCCESS";
         }, delayDuration);
     }
-    deleteItem(data: T): Promise<string>{
-        return Promise.resolve("");
+    deleteItem(id: string): Promise<string>{
+        let list: any = this.getLocalStorageData();
+        list = (list || []).filter((item: any) => item.id !== id);
+        this.setLocalStorageData(list);
+        return this.resolveWithDelay(() => {
+            return "SUCCESS";
+        }, delayDuration);
     }
 }

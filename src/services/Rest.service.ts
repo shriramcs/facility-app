@@ -48,7 +48,7 @@ export class RestApiService<T> implements BackendServiceI<T>{
         return Promise.resolve("Item updated successfully");
     }
     
-    public deleteItem(data: T): Promise<string>{
+    public deleteItem(id: string): Promise<string>{
         return Promise.resolve("Item deleted successfully");
     }
 }

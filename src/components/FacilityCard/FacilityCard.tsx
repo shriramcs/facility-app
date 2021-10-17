@@ -12,9 +12,13 @@ import { FacilityI } from "../../types/Facility.type";
 import { ROUTE_FACILITY_URL, SLASH } from "../../common/constants";
 
 const muiStyles: any = makeStyles((theme: any) => ({
+    button:{
+        textTransform: 'none',
+        flex: 1
+    },
     card: {
         '&:hover': {
-            cursor: 'pointer',
+            border: 'nor',
         }
     },
 }));
@@ -30,7 +34,6 @@ const FacilityCard: React.FC<Props> = (props) => {
     const muiClasses = muiStyles();
     
     const handleDelete = () => {
-        console.log("delete");
         onDeleteFacility()
     }
     const handleEdit = () => {
@@ -61,11 +64,11 @@ const FacilityCard: React.FC<Props> = (props) => {
             </CardContent>
             {
                 mode !== "edit" && <CardActions>
-                    <Button size="small" style={{flex: 1}} onClick={handleEdit} >
+                    <Button className={muiClasses.button}  onClick={handleEdit} >
                         Edit
                         <EditIcon sx={{ml: 1}}/>
                     </Button>
-                    <Button size="small" style={{flex: 1}} color="error" onClick={handleDelete} >
+                    <Button className={muiClasses.button} color="error" onClick={handleDelete} >
                         delete
                         <DeleteOutlineIcon sx={{ml: 1}} />
                     </Button>

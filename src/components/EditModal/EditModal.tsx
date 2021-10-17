@@ -47,8 +47,8 @@ const EditModal: React.FC<Props> = props => {
                     fetchFacilityDetails(parseInt(id));
                 }
             }
-        } catch(e) {
-            console.log(e);
+        } catch(e: any) {
+            setError(e.message);
         }
         return () => {
             setOpenEditModal(false);
@@ -62,8 +62,6 @@ const EditModal: React.FC<Props> = props => {
         history.push(ROUTE_FACILITY_URL);
     };
     const handleSaveChanges = () => {
-        console.log(facilityEditModal);
-        
         //validate before submitting the form and close modal.
         if(facilityEditModal){
             if(!(facilityEditModal.name && facilityEditModal.type && facilityEditModal.address)){
@@ -90,20 +88,20 @@ const EditModal: React.FC<Props> = props => {
         setFacilityEditModal({ ...facilityEditModal, [field]: e.target.value });
     }
 
-    const fetchFacilityDetails = (id: number) => {
+    const fetchFacilityDetails = async (id: number) => {
         setLoading(true);
-        FacilityServiceApi.getItem(id).then(d => {
-            if(d) {
-                setFacilityEditModal(d);
+        try{
+            const facItem = await FacilityServiceApi.getItem(id);
+            if(facItem) {
+                setFacilityEditModal(facItem);
             } else {
                 setError("Error loading Facility details, please contact the admin team.");
             }
+        } catch(e: any) {
+            setError("Error loading Facility details, please contact the admin team. " + e.message);
+        } finally {
             setLoading(false);
-        }).catch(e => {
-            setError("Error loading Facility details, please contact the admin team.");
-            console.log(e);
-            setLoading(false);
-        });
+        }
     }
   
     return (
