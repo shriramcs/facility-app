@@ -57,13 +57,13 @@ type FR = (state: FacilityStateI, action: FacilityActions) => FacilityStateI;
 const facilityReducer: FR = (state: FacilityStateI, action: FacilityActions) => {
     switch (action.type) {
       case FacilityActionTypeEnum.FACILITY_SUCCESS:
-        // const begin = (state.pagination.page - 1) * state.pagination.pageSize;
-        // const end = begin + state.pagination.pageSize;
+        const begin = (action.payload.pagination.page - 1) * state.pagination.pageSize;
+        const end = begin + state.pagination.pageSize;
 
         return {
           ...state,
           isLoading: false,
-          facilities: action.payload.data, //.slice(begin, end),
+          facilities: action.payload.data.slice(begin, end),
           error: "",
           pagination: {...state.pagination, ...action.payload.pagination}
         };
@@ -99,14 +99,17 @@ const facilityReducer: FR = (state: FacilityStateI, action: FacilityActions) => 
       }
     });
 
-    let fetchFacilities = async () => {
+    let fetchFacilities = async (page = 1) => {
         dispatch({ type: FacilityActionTypeEnum.FACILITY_FETCH });
         try{
-            const d = await FacilityServiceApi.getList();
-            if(d){
+            const dataList = await FacilityServiceApi.getList();
+            if(dataList){
                 dispatch({ type: FacilityActionTypeEnum.FACILITY_SUCCESS, payload: {
-                  data: d,
-                  pagination: {} as PaginationI}
+                  data: dataList,
+                  pagination: {
+                    page: page,
+                    pages: Math.ceil(dataList.length / 6)
+                  } as PaginationI}
                 });
             } else {
                 dispatch({ type: FacilityActionTypeEnum.FACILITY_FAILED, payload: FETCH_FAILURE_MESSAGE});

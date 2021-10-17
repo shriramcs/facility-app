@@ -19,8 +19,8 @@ const FacilityPage: React.FC<Props> = () => {
         history.push(ROUTE_FACILITY_NEW_URL);
     }
 
-    const handleRefresh = () => {
-        fetchFacilities();
+    const handleRefresh = (page: number) => {
+        fetchFacilities(page);
     }
 
     return (

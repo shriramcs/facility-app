@@ -8,14 +8,12 @@ import PaginationComp from '../Pagination/PaginationComp';
 
 type Props = {
     facilityListData: FacilityI[]  | null | undefined;
-    refreshList: () => void;
+    refreshList: (page: number) => void;
 };
 
 const FacilitList: React.FC<Props> = ({facilityListData, refreshList}) => {
 
     const { pagination } = useFacilityContext();
-
-    
     const [deleteFacility, setDeleteFacility] = React.useState<FacilityI>();
 
     const handleDeleteFacility = (facility: FacilityI) => {
@@ -23,7 +21,7 @@ const FacilitList: React.FC<Props> = ({facilityListData, refreshList}) => {
     } 
 
     const onChange = (page: number, pageSize: number) => {
-        console.log(page, pageSize);
+        refreshList(page);
     };
 
     const NoData = () => (<div style={{textAlign: 'center', padding: "1rem"}}>
@@ -48,9 +46,8 @@ const FacilitList: React.FC<Props> = ({facilityListData, refreshList}) => {
                             ))
                         }
                         </Grid>
-                        
                         {pagination.pages > 0 && <div style={{marginTop: "1rem"}}>
-                            <PaginationComp onChange={onChange} pageCount={pagination.pages}></PaginationComp>
+                            <PaginationComp page={pagination.page} onChange={onChange} pageCount={pagination.pages}></PaginationComp>
                         </div>}
                     </>
                 )

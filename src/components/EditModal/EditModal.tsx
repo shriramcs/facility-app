@@ -12,7 +12,7 @@ import { EMPTY_STRING, FACILITY_EDIT_MODAL_TITLE, ROUTE_FACILITY_URL } from "../
 
 interface Props {
     facility: FacilityI;
-    refreshList: () => void
+    refreshList: (page: number) => void
 }
 
 export enum modeEnum{
@@ -77,7 +77,7 @@ const EditModal: React.FC<Props> = props => {
         ).then(d => {
             setLoading(false);
             history.push(ROUTE_FACILITY_URL);
-            refreshList();
+            refreshList(1);
         }).catch(e => {
             setLoading(false);
             console.log(e);

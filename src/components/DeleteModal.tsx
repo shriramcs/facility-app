@@ -6,7 +6,7 @@ import ModalDialog from "./ModalDialog/ModalDialog";
 
 interface Props {
     facilityId: string;
-    refreshList: () => void
+    refreshList: (page: number) => void
 }
 
 const DeleteModal: React.FC<Props> = props => {
@@ -28,7 +28,7 @@ const DeleteModal: React.FC<Props> = props => {
             setLoading(false);
         }
         handleClose();
-        refreshList();
+        refreshList(1);
     };
   
     return (

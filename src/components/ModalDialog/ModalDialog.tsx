@@ -55,7 +55,7 @@ export interface ModalDialogProps {
     title?: string;
     closeButton?: boolean;
     mode?: string;
-    refreshList?: () => void;
+    refreshList?: (page: number | undefined) => void;
     onClose?: () => void;
     primaryButtonName?: string;
     primaryButtonColor?: 'success' | 'error' | 'warning';
