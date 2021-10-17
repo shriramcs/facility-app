@@ -8,6 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import { FacilityI } from "../../types/Facility.type";
 import FacilityServiceApi from "../../services/facility.service";
 import ModalDialog from "../ModalDialog/ModalDialog";
+import { EMPTY_STRING, FACILITY_EDIT_MODAL_TITLE } from "../../common/constants";
 
 interface Props {
     facility: FacilityI;
@@ -27,7 +28,7 @@ const EditModal: React.FC<Props> = props => {
     const [mode, setMode] = React.useState<modeEnum>(modeEnum.new);
     const [facilityEditModal, setFacilityEditModal] = React.useState<FacilityI>({} as FacilityI);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [error, setError] = useState(EMPTY_STRING);
 
     React.useEffect(() => {
         setOpenEditModal(!!id);
@@ -45,7 +46,7 @@ const EditModal: React.FC<Props> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
-    const modalTitle = () => mode === modeEnum.edit ? "Edit Information" : "New Information";
+    const modalTitle = () => mode === modeEnum.edit ? FACILITY_EDIT_MODAL_TITLE : FACILITY_EDIT_MODAL_TITLE;
     const handleClose = () => {
         setOpenEditModal(false);
         history.goBack();

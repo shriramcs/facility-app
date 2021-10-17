@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 import { FacilityI } from "../../types/Facility.type";
+import { ROUTE_FACILITY_URL, SLASH } from "../../common/constants";
 
 const muiStyles: any = makeStyles((theme: any) => ({
     card: {
@@ -37,7 +38,7 @@ const FacilityCard: React.FC<Props> = (props) => {
         try{
             const id = parseInt(facility.id);
             if(!isNaN(id)){
-                history.push("/" + facility.id);
+                history.push(ROUTE_FACILITY_URL + SLASH + facility.id);
             }
         } catch(e) {
             console.log(e);

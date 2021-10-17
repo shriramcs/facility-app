@@ -7,6 +7,7 @@ import { FacilityI } from '../../types/Facility.type';
 import { Switch, useHistory, Route, useParams } from 'react-router-dom';
 import EditModal from '../../components/EditModal/EditModal';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import { ROUTE_FACILITY_NEW_URL } from '../../common/constants';
 
 type Props = {};
 
@@ -38,7 +39,7 @@ const FacilityPage: React.FC<Props> = () => {
     }
 
     const handleCreate = () => {
-        history.push('/new');
+        history.push(ROUTE_FACILITY_NEW_URL);
     }
 
     const handleRefresh = () => {
@@ -70,7 +71,7 @@ const FacilityPage: React.FC<Props> = () => {
             }
 
             <Switch>
-                <Route path="/:id" children={<EditModal facility={{} as FacilityI} refreshList={handleRefresh} />} />
+                <Route path="/facility/:id" children={<EditModal facility={{} as FacilityI} refreshList={handleRefresh} />} />
             </Switch>
         </FacilityPageWrapper>
     );
