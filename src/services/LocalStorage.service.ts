@@ -1,7 +1,7 @@
 import { BackendServiceI } from "../types/common.types";
 
 const localStorageToken = 'FACILITIES'
-const delayDuration = 2000;
+const delayDuration = 1000;
 
 export class LocalStorageService<T> implements BackendServiceI<T>{
 
