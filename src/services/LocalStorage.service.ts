@@ -39,7 +39,7 @@ export class LocalStorageService<T extends BaseModelI> implements BackendService
         if(!list){
             list = [];
         }
-        list.push({...data, id: list.length + 1});
+        list.push({...data, id: Date.now().toString()});
         this.setLocalStorageData(list);
         return this.resolveWithDelay(() => {
             return "SUCCESS";
