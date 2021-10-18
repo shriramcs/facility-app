@@ -44,7 +44,7 @@ const EditModal: React.FC<Props> = props => {
             if(id !== 'new'){
                 const facId = parseInt(id);
                 if(!isNaN(facId)){
-                    fetchFacilityDetails(parseInt(id));
+                    fetchFacilityDetails(id);
                 } else {
                     history.push(ROUTE_FACILITY_URL);
                 }
@@ -90,7 +90,7 @@ const EditModal: React.FC<Props> = props => {
         setFacilityEditModal({ ...facilityEditModal, [field]: e.target.value });
     }
 
-    const fetchFacilityDetails = async (id: number) => {
+    const fetchFacilityDetails = async (id: string) => {
         setLoading(true);
         try{
             const facItem = await FacilityServiceApi.getItem(id);
