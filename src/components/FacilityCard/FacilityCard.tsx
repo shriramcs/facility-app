@@ -41,9 +41,12 @@ const FacilityCard: React.FC<Props> = (props) => {
             const id = parseInt(facility.id);
             if(!isNaN(id)){
                 history.push(ROUTE_FACILITY_URL + SLASH + facility.id);
+            } else {
+                history.push(ROUTE_FACILITY_URL)
             }
         } catch(e) {
             console.log(e);
+            history.push(ROUTE_FACILITY_URL);
         };
         
     }

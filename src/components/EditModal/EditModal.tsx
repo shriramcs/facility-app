@@ -45,6 +45,8 @@ const EditModal: React.FC<Props> = props => {
                 const facId = parseInt(id);
                 if(!isNaN(facId)){
                     fetchFacilityDetails(parseInt(id));
+                } else {
+                    history.push(ROUTE_FACILITY_URL);
                 }
             }
         } catch(e: any) {
