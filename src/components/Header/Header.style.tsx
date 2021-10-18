@@ -10,18 +10,6 @@ const HeaderWrapper = styled.header`
       filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.1));
     }
     
-    .navbar a {
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .navbar a:first-child {
-      margin-left: 0.25rem;
-    }
-    .navbar a.active{
-      text-decoration: underline;
-      color: orange
-    }
-    
     .App-header img {
       width: 50px;
       height: 50px;
@@ -31,17 +19,6 @@ const HeaderWrapper = styled.header`
     
     .App-header select{
       border: none;
-    }
-    
-    ul.navbar, .navbar li {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    ul.navbar {
-      display: flex;
-      gap: 1rem;
     }
     
     .site-header__wrapper {
@@ -86,7 +63,5 @@ const HeaderWrapper = styled.header`
       margin-right: 1rem;
     }
 `;
-
-export const NavBarWrapper = styled.div``;
 
 export default HeaderWrapper;
