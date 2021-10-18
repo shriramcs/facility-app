@@ -30,7 +30,7 @@ export class RestApiService<T> implements BackendServiceI<T>{
         }
     }
     
-    public async getItem(id: number): Promise<T>{
+    public async getItem(id: string): Promise<T>{
         try{
             const url = "BASE_URL/" + id; // TODO
             const data = await this.getItemRestDataAsync(url);
