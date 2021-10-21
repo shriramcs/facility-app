@@ -5,8 +5,8 @@ import HeaderWrapper from './Header.style';
 import NavBar from './NavBar';
 
 const Header: React.FC<{}> = () => {
-    const logo = "TRACKMAN";
-    const slogan = "GOLF";
+    const logo = "Transport Company";
+    const slogan = "SCM";
 
     return (
         <HeaderWrapper>

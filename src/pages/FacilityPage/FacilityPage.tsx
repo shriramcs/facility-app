@@ -8,6 +8,7 @@ import EditModal from '../../components/EditModal/EditModal';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { ROUTE_FACILITY_NEW_URL } from '../../common/constants';
 import { useFacilityContext } from '../../contexts/FacilityContext';
+import SearchFilter from '../../components/SearchFilter/SearchFilter';
 
 type Props = {};
 
@@ -39,6 +40,10 @@ const FacilityPage: React.FC<Props> = () => {
                     <AddOutlinedIcon sx={{ml: 1}} />
                 </Button>
             </div>
+
+            {/* <div>
+                <SearchFilter></SearchFilter>
+            </div> */}
             
             {error && <Alert severity="error">{error}</Alert>}
 

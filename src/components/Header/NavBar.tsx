@@ -47,7 +47,7 @@ const NavBar = () => {
         >
             <ul className="navbar mobile">
                 {
-                routeLinks.map((link, index) => (<MenuItem onClick={handleMenuClose}>
+                routeLinks.map((link, index) => (<MenuItem onClick={handleMenuClose} key={index}>
                         <NavLink to={link.routeToPath} exact activeClassName="active">{link.displayName}</NavLink>
                     </MenuItem>))
                 }
