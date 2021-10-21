@@ -19,8 +19,13 @@ export interface PaginationI {
     page: number;
 }
 
+export interface SearchParamsI{
+  searchKey: string;
+  searchType?: string;
+}
+
 export type FacilityActions =
-  | { type: FacilityActionTypeEnum.FACILITY_SUCCESS; payload: {data: FacilityI[], pagination: PaginationI} }
+  | { type: FacilityActionTypeEnum.FACILITY_SUCCESS; payload: {data: FacilityI[], pagination: PaginationI, searchParams: SearchParamsI} }
   | { type: FacilityActionTypeEnum.FACILITY_FAILED; payload: string }
   | { type: FacilityActionTypeEnum.FACILITY_FETCH};
 
@@ -28,13 +33,16 @@ export interface FacilityStateI {
     facilities?: FacilityI[] | null;
     isLoading?: boolean;
     error?: string;
-    pagination: PaginationI
+    searchParams?: SearchParamsI | null | undefined;
+    pagination: PaginationI;
 }
 
 export interface FacilityContextI extends FacilityStateI {
     dispatch: React.Dispatch<FacilityActions>;
     fetchFacilities?: any;
 }
+
+const searchParamsDefault = {} as SearchParamsI;
 
 const FacilityContext = React.createContext<FacilityContextI>({
     facilities: [] as FacilityI[],
@@ -45,6 +53,7 @@ const FacilityContext = React.createContext<FacilityContextI>({
       pages: 10,
       page: 1
     },
+    searchParams: {...searchParamsDefault},
     dispatch: () => {}
 });
 
@@ -65,7 +74,8 @@ const facilityReducer: FR = (state: FacilityStateI, action: FacilityActions) => 
           isLoading: false,
           facilities: action.payload.data.slice(begin, end),
           error: "",
-          pagination: {...state.pagination, ...action.payload.pagination}
+          pagination: {...state.pagination, ...action.payload.pagination},
+          searchParams: {...state.searchParams, ...action.payload.searchParams}
         };
       case FacilityActionTypeEnum.FACILITY_FAILED:
         return {
@@ -96,16 +106,19 @@ const facilityReducer: FR = (state: FacilityStateI, action: FacilityActions) => 
         pageSize: 6,
         pages: 0,
         page: 1
-      }
+      },
+      searchParams: {...searchParamsDefault}
     });
 
-    let fetchFacilities = async (page = 1) => {
+    let fetchFacilities = async (page = 1, searchParams = searchParamsDefault) => {
+      console.log("fetching with search params", searchParams);
         dispatch({ type: FacilityActionTypeEnum.FACILITY_FETCH });
         try{
             const dataList = await FacilityServiceApi.getList();
             if(dataList){
                 dispatch({ type: FacilityActionTypeEnum.FACILITY_SUCCESS, payload: {
                   data: dataList,
+                  searchParams: {...searchParams},
                   pagination: {
                     page: page,
                     pages: Math.ceil(dataList.length / 6)
